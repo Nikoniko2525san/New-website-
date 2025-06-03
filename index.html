@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ニコニコの個人紹介文</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@600&display=swap');
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html, body {
+      height: 100%;
+      background: black;
+      overflow: hidden;
+      font-family: 'Orbitron', sans-serif;
+    }
+
+    .background-video {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      object-fit: cover;
+      z-index: 0;
+      pointer-events: none;
+      filter: brightness(0.3) blur(2px);
+    }
+
+    .overlay {
+      position: relative;
+      z-index: 2;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      text-align: center;
+    }
+
+    .date {
+      position: fixed;
+      top: 15px;
+      left: 20px;
+      font-size: 0.9rem;
+      color: #0ff;
+      text-shadow: 0 0 5px #0ff;
+      z-index: 3;
+    }
+
+    .card {
+      background: rgba(0, 0, 0, 0.4);
+      padding: 2rem 3rem;
+      border-radius: 20px;
+      border: 2px solid #0ff;
+      box-shadow: 0 0 30px #0ff, 0 0 60px #0ff inset;
+      backdrop-filter: blur(10px);
+      max-width: 90%;
+      cursor: pointer;
+      animation: pulse 3s infinite ease-in-out;
+      transition: transform 0.3s ease;
+    }
+
+    .card:hover {
+      transform: scale(1.03);
+    }
+
+    .title {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+      color: #0ff;
+      text-shadow: 0 0 10px #0ff, 0 0 30px #0ff;
+      animation: wave 4s infinite ease-in-out;
+    }
+
+    .typewriter {
+      font-size: 1.2rem;
+      color: #0ff;
+      white-space: pre;
+      text-shadow: 0 0 6px #0ff;
+    }
+
+    .cursor {
+      display: inline-block;
+      width: 1ch;
+      animation: blink 1s infinite;
+    }
+
+    @keyframes blink {
+      0%, 50% { opacity: 1; }
+      51%, 100% { opacity: 0; }
+    }
+
+    @keyframes pulse {
+      0%, 100% {
+        box-shadow: 0 0 20px #0ff, 0 0 40px #0ff inset;
+      }
+      50% {
+        box-shadow: 0 0 60px #0ff, 0 0 80px #0ff inset;
+      }
+    }
+
+    @keyframes wave {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-5px); }
+    }
+
+    @media (max-width: 600px) {
+      .card {
+        padding: 1.5rem 2rem;
+      }
+      .title {
+        font-size: 1.5rem;
+      }
+      .typewriter {
+        font-size: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<!-- 📅 日付表示 -->
+<div class="date" id="date"></div>
+
+<!-- 🎥 背景動画（YouTube埋め込み） -->
+<iframe class="background-video"
+  src="https://www.youtube.com/embed/FtutLA63Cp8?autoplay=1&mute=1&loop=1&playlist=FtutLA63Cp8&controls=0&showinfo=0&modestbranding=1&rel=0"
+  frameborder="0"
+  allow="autoplay; encrypted-media"
+  allowfullscreen>
+</iframe>
+
+<!-- 💡 中央コンテンツ -->
+<div class="overlay">
+  <div class="card" onclick="location.href='https://line.me/R/nv/profilePopup/mid=u6368685001eb5953afa2f35499cf3af9'">
+    <div class="title">ニコニコ!!</div>
+    <div class="typewriter" id="typewriter"></div>
+  </div>
+</div>
+
+<!-- 🧠 JS アニメーション -->
+<script>
+  // 日付出すぜ！
+  const dateElement = document.getElementById('date');
+  const now = new Date();
+  dateElement.textContent = now.toLocaleDateString('ja-JP', { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' });
+
+  // タイピング式やで
+  const phrases = [
+    "私の名前はニコニコ",
+    "界隈をゴミにさせたやつは",
+    "運営と白夜だろｗｗｗｗ",
+    "ここをクリックして俺のLINEを追加して"
+  ];
+
+  let i = 0, j = 0, isDeleting = false;
+  const el = document.getElementById("typewriter");
+
+  function type() {
+    const current = phrases[i];
+    if (isDeleting) {
+      j--;
+    } else {
+      j++;
+    }
+
+    el.innerHTML = current.slice(0, j) + '<span class="cursor">|</span>';
+
+    if (!isDeleting && j === current.length) {
+      setTimeout(() => { isDeleting = true; type(); }, 1500);
+    } else if (isDeleting && j === 0) {
+      isDeleting = false;
+      i = (i + 1) % phrases.length;
+      setTimeout(type, 500);
+    } else {
+      setTimeout(type, isDeleting ? 40 : 70);
+    }
+  }
+
+  type();
+</script>
+
+</body>
+</html>
